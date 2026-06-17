@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MoscoRetail — Page 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8D08A;
+      --gold-dim: rgba(201,168,76,0.15);
+      --bg: #0E0D0B;
+      --bg2: #141210;
+      --bg3: #1C1A16;
+      --text: #F0EAD6;
+      --text-dim: #9A9180;
+      --white: #FAF7F0;
+      --cream: #F5F0E8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    .cursor {
+      position: fixed; width: 10px; height: 10px;
+      background: var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 36px; height: 36px;
+      border: 1px solid var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: left 0.06s ease, top 0.06s ease, width 0.3s, height 0.3s;
+      opacity: 0.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 28px 60px;
+      z-index: 100;
+      background: linear-gradient(to bottom, rgba(14,13,11,0.98) 0%, transparent 100%);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem; font-weight: 600;
+      letter-spacing: 0.12em; color: var(--gold);
+      text-transform: uppercase;
+    }
+    .nav-logo span { font-style: italic; font-weight: 300; color: var(--text); }
+    .nav-links { display: flex; gap: 42px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--text-dim);
+      font-size: 0.72rem; letter-spacing: 0.22em;
+      text-transform: uppercase; transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cart {
+      display: flex; align-items: center; gap: 8px;
+      border: 1px solid var(--gold); color: var(--gold);
+      background: transparent; padding: 9px 22px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.2em;
+      text-transform: uppercase; cursor: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .nav-cart:hover { background: var(--gold); color: var(--bg); }
+    .cart-count {
+      background: var(--gold); color: var(--bg);
+      border-radius: 50%; width: 18px; height: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.55rem; font-weight: 500;
+    }
+    .nav-cart:hover .cart-count { background: var(--bg); color: var(--gold); }
+
+    /* PAGE BANNER */
+    .page-banner {
+      padding: 140px 60px 70px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-banner-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #0E0D0B 60%, #1A1710 100%);
+      z-index: 0;
+    }
+    .page-banner-grid {
+      position: absolute; inset: 0; z-index: 1;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .page-banner-content { position: relative; z-index: 2; }
+    .banner-breadcrumb {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.62rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--text-dim);
+      margin-bottom: 22px;
+    }
+    .bc-sep { color: var(--gold); }
+    .bc-current { color: var(--gold); }
+
+    .banner-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 300; color: var(--white);
+      line-height: 1;
+    }
+    .banner-title em { font-style: italic; color: var(--gold); }
+
+    .banner-right { position: relative; z-index: 2; text-align: right; }
+    .banner-count-label {
+      font-size: 0.6rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--text-dim);
+      display: block; margin-bottom: 6px;
+    }
+    .banner-count-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem; font-weight: 300; color: var(--gold);
+    }
+
+    /* FILTERS */
+    .filter-bar {
+      padding: 22px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(201,168,76,0.08);
+      background: var(--bg2);
+    }
+    .filter-group { display: flex; gap: 6px; }
+    .filter-btn {
+      padding: 8px 20px;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: 1px solid rgba(201,168,76,0.2);
+      background: transparent;
+      color: var(--text-dim);
+      cursor: none;
+      transition: all 0.3s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .filter-btn.active { background: var(--gold-dim); }
+    .sort-select {
+      background: transparent;
+      border: 1px solid rgba(201,168,76,0.2);
+      color: var(--text-dim);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.2em;
+      text-transform: uppercase; padding: 8px 16px;
+      cursor: none;
+    }
+    .sort-select option { background: #1a1816; }
+
+    /* PRODUCT GRID */
+    .shop-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 80vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      padding: 48px 32px;
+      border-right: 1px solid rgba(201,168,76,0.08);
+      background: var(--bg2);
+    }
+    .sidebar-section { margin-bottom: 40px; }
+    .sidebar-title {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .sidebar-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      cursor: none;
+    }
+    .sidebar-item label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.7rem; color: var(--text-dim);
+      letter-spacing: 0.06em; cursor: none;
+      transition: color 0.2s;
+    }
+    .sidebar-item:hover label { color: var(--text); }
+    .sidebar-cb {
+      width: 14px; height: 14px;
+      border: 1px solid rgba(201,168,76,0.3);
+      appearance: none; background: transparent; cursor: none;
+      transition: all 0.2s; flex-shrink: 0;
+    }
+    .sidebar-cb:checked {
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+    .sidebar-count {
+      font-size: 0.58rem;
+      color: var(--text-dim);
+      background: rgba(255,255,255,0.04);
+      padding: 2px 8px;
+    }
+
+    .price-range { padding: 8px 0; }
+    .price-track {
+      height: 2px; background: rgba(201,168,76,0.2);
+      position: relative; margin: 16px 0;
+    }
+    .price-fill {
+      position: absolute; left: 20%; right: 25%;
+      height: 100%; background: var(--gold);
+    }
+    .price-thumb {
+      position: absolute; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 2px solid var(--bg2);
+    }
+    .price-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.62rem; color: var(--text-dim);
+      margin-top: 8px;
+    }
+
+    .color-swatches { display: flex; gap: 8px; flex-wrap: wrap; padding: 4px 0; }
+    .swatch {
+      width: 20px; height: 20px;
+      border-radius: 50%; cursor: none;
+      position: relative; transition: transform 0.2s;
+    }
+    .swatch:hover { transform: scale(1.2); }
+    .swatch.active::after {
+      content: '';
+      position: absolute; inset: -3px;
+      border-radius: 50%;
+      border: 1px solid var(--gold);
+    }
+
+    /* PRODUCTS */
+    .products-area { padding: 48px 60px; background: var(--bg); }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .product-card {
+      position: relative;
+      background: var(--bg3);
+      overflow: hidden;
+      cursor: none;
+      group: true;
+    }
+    .product-card-img {
+      aspect-ratio: 3/4;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-card-bg {
+      width: 100%; height: 100%;
+      transition: transform 0.7s ease;
+    }
+    .product-card:hover .product-card-bg { transform: scale(1.06); }
+
+    .bg-a { background: linear-gradient(150deg, #1F1C16, #2C2418, #191510); }
+    .bg-b { background: linear-gradient(170deg, #141210, #1E1A14, #252018); }
+    .bg-c { background: linear-gradient(130deg, #1A1612, #22201A, #141210); }
+    .bg-d { background: linear-gradient(160deg, #201C14, #2A2418, #191510); }
+    .bg-e { background: linear-gradient(140deg, #161410, #201C16, #242018); }
+    .bg-f { background: linear-gradient(155deg, #1C1A14, #261E14, #141210); }
+
+    .product-tag {
+      position: absolute; top: 16px; left: 16px;
+      font-size: 0.55rem; letter-spacing: 0.22em;
+      text-transform: uppercase; padding: 5px 12px;
+      border: 1px solid var(--gold); color: var(--gold);
+      background: rgba(14,13,11,0.7);
+      backdrop-filter: blur(6px);
+    }
+    .product-tag.sale { border-color: #C9504C; color: #C9504C; }
+
+    .product-actions {
+      position: absolute;
+      right: 16px; top: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      transform: translateX(60px);
+      transition: transform 0.4s ease;
+    }
+    .product-card:hover .product-actions { transform: translateX(0); }
+    .product-action-btn {
+      width: 36px; height: 36px;
+      background: rgba(14,13,11,0.8);
+      border: 1px solid rgba(201,168,76,0.3);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      cursor: none; transition: border-color 0.2s, background 0.2s;
+    }
+    .product-action-btn:hover { border-color: var(--gold); background: var(--gold-dim); }
+    .product-action-btn svg { width: 14px; height: 14px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+
+    .product-card-info {
+      padding: 20px 22px 24px;
+      border-top: 1px solid rgba(201,168,76,0.08);
+    }
+    .product-category {
+      font-size: 0.58rem; letter-spacing: 0.26em;
+      text-transform: uppercase; color: var(--text-dim);
+      margin-bottom: 5px; display: block;
+    }
+    .product-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 400;
+      color: var(--white); line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .product-footer {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .product-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 600; color: var(--gold);
+    }
+    .product-price-old {
+      font-size: 0.75rem; color: var(--text-dim);
+      text-decoration: line-through; margin-left: 6px;
+    }
+    .add-to-cart {
+      font-size: 0.58rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--text-dim);
+      background: transparent; border: none;
+      cursor: none; display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s;
+    }
+    .add-to-cart:hover { color: var(--gold); }
+    .add-to-cart svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+    /* FEATURED BANNER */
+    .featured-banner {
+      margin: 2px 0;
+      grid-column: 1 / -1;
+      background: var(--bg3);
+      padding: 52px 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(201,168,76,0.08);
+      border-bottom: 1px solid rgba(201,168,76,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .fb-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, #1C1A14 0%, #0E0D0B 100%);
+    }
+    .fb-pattern {
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg, transparent, transparent 40px,
+        rgba(201,168,76,0.03) 40px, rgba(201,168,76,0.03) 41px
+      );
+    }
+    .fb-content { position: relative; z-index: 2; }
+    .fb-eyebrow {
+      font-size: 0.6rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 12px;
+    }
+    .fb-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+    .fb-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem; font-weight: 300;
+      color: var(--white); line-height: 1.1;
+    }
+    .fb-title em { font-style: italic; color: var(--gold-light); }
+    .fb-cta {
+      position: relative; z-index: 2;
+      display: flex; align-items: center; gap: 28px;
+    }
+    .fb-btn {
+      background: var(--gold); color: var(--bg);
+      border: none; padding: 14px 34px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.2em;
+      text-transform: uppercase; font-weight: 500;
+      cursor: none; transition: opacity 0.3s;
+    }
+    .fb-btn:hover { opacity: 0.88; }
+    .fb-price-tag {
+      text-align: right;
+    }
+    .fb-price-label {
+      font-size: 0.58rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--text-dim);
+      display: block; margin-bottom: 4px;
+    }
+    .fb-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; color: var(--gold); font-weight: 300;
+    }
+
+    /* PAGINATION */
+    .pagination {
+      padding: 60px 60px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .page-num {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(201,168,76,0.2);
+      font-size: 0.72rem; color: var(--text-dim);
+      cursor: none; transition: all 0.2s;
+    }
+    .page-num:hover { border-color: var(--gold); color: var(--gold); }
+    .page-num.active { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+    .page-dots { color: var(--text-dim); padding: 0 8px; font-size: 0.8rem; }
+    .page-arrow {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(201,168,76,0.2);
+      cursor: none; transition: all 0.2s;
+    }
+    .page-arrow svg { width: 14px; height: 14px; stroke: var(--text-dim); fill: none; stroke-width: 1.5; }
+    .page-arrow:hover { border-color: var(--gold); }
+    .page-arrow:hover svg { stroke: var(--gold); }
+
+    /* NEWSLETTER */
+    .newsletter {
+      background: var(--bg3);
+      border-top: 1px solid rgba(201,168,76,0.1);
+      padding: 80px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .nl-tag {
+      font-size: 0.6rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+    }
+    .nl-tag::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+    .nl-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 300; color: var(--white); line-height: 1.15;
+    }
+    .nl-title em { font-style: italic; color: var(--gold-light); }
+    .nl-form { display: flex; flex-direction: column; gap: 16px; }
+    .nl-input-group { display: flex; gap: 0; }
+    .nl-input {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-right: none;
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.8rem; letter-spacing: 0.06em;
+      padding: 14px 20px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .nl-input::placeholder { color: var(--text-dim); }
+    .nl-input:focus { border-color: var(--gold); }
+    .nl-submit {
+      background: var(--gold); color: var(--bg);
+      border: 1px solid var(--gold);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.22em;
+      text-transform: uppercase; font-weight: 500;
+      padding: 14px 26px; cursor: none;
+      white-space: nowrap; transition: opacity 0.3s;
+    }
+    .nl-submit:hover { opacity: 0.85; }
+    .nl-note {
+      font-size: 0.6rem; color: var(--text-dim);
+      letter-spacing: 0.06em; line-height: 1.7;
+    }
+
+    /* FOOTER */
+    .footer {
+      background: var(--bg);
+      border-top: 1px solid rgba(201,168,76,0.1);
+      padding: 60px 60px 36px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 52px;
+    }
+    .footer-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 600;
+      letter-spacing: 0.12em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+    .footer-brand-name span { font-style: italic; font-weight: 300; color: var(--text); }
+    .footer-desc {
+      font-size: 0.75rem; line-height: 1.9;
+      color: var(--text-dim); max-width: 280px;
+    }
+    .footer-col-title {
+      font-size: 0.6rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 18px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a {
+      text-decoration: none; font-size: 0.75rem;
+      color: var(--text-dim); transition: color 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-bottom {
+      border-top: 1px solid rgba(201,168,76,0.08);
+      padding-top: 28px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy {
+      font-size: 0.6rem; letter-spacing: 0.18em;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+    .footer-page-badge {
+      font-size: 0.6rem; letter-spacing: 0.25em;
+      color: var(--gold); border: 1px solid rgba(201,168,76,0.3);
+      padding: 6px 16px; text-transform: uppercase;
+    }
+    .footer-socials { display: flex; gap: 12px; }
+    .social-link {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(201,168,76,0.2);
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
+      font-size: 0.6rem; color: var(--text-dim);
+      transition: all 0.2s; letter-spacing: 0.05em;
+    }
+    .social-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Mosco<span>Retail</span></div>
+    <ul class="nav-links">
+      <li><a href="#">Collections</a></li>
+      <li><a href="#">New Arrivals</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Stores</a></li>
+    </ul>
+    <button class="nav-cart">
+      Cart
+      <span class="cart-count">3</span>
+    </button>
+  </nav>
+
+  <!-- PAGE BANNER -->
+  <div class="page-banner">
+    <div class="page-banner-bg"></div>
+    <div class="page-banner-grid"></div>
+    <div class="page-banner-content animate-in" style="animation-delay:0.1s">
+      <div class="banner-breadcrumb">
+        <span>Home</span>
+        <span class="bc-sep">/</span>
+        <span>Collections</span>
+        <span class="bc-sep">/</span>
+        <span class="bc-current">Autumn Winter 2025 — Page 2</span>
+      </div>
+      <h1 class="banner-title">
+        All <em>Products</em>
+      </h1>
+    </div>
+    <div class="banner-right animate-in" style="animation-delay:0.25s">
+      <span class="banner-count-label">Total Items</span>
+      <div class="banner-count-num">340</div>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Outerwear</button>
+      <button class="filter-btn">Knitwear</button>
+      <button class="filter-btn">Footwear</button>
+      <button class="filter-btn">Accessories</button>
+    </div>
+    <select class="sort-select">
+      <option>Sort: Featured</option>
+      <option>Price: Low to High</option>
+      <option>Price: High to Low</option>
+      <option>Newest First</option>
+    </select>
+  </div>
+
+  <!-- SHOP LAYOUT -->
+  <div class="shop-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Category</div>
+        <div class="sidebar-item">
+          <label><input type="checkbox" class="sidebar-cb" checked> Outerwear</label>
+          <span class="sidebar-count">48</span>
+        </div>
+        <div class="sidebar-item">
+          <label><input type="checkbox" class="sidebar-cb"> Knitwear</label>
+          <span class="sidebar-count">31</span>
+        </div>
+        <div class="sidebar-item">
+          <label><input type="checkbox" class="sidebar-cb"> Footwear</label>
+          <span class="sidebar-count">27</span>
+        </div>
+        <div class="sidebar-item">
+          <label><input type="checkbox" class="sidebar-cb"> Accessories</label>
+          <span class="sidebar-count">64</span>
+        </div>
+        <div class="sidebar-item">
+          <label><input type="checkbox" class="sidebar-cb"> Tailoring</label>
+          <span class="sidebar-count">19</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Price Range</div>
+        <div class="price-range">
+          <div class="price-track">
+            <div class="price-fill"></div>
+            <div class="price-thumb" style="left:20%"></div>
+            <div class="price-thumb" style="left:75%"></div>
+          </div>
+          <div class="price-label"><span>1,000 RUB</span><span>25,000 RUB</span></div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Colour</div>
+        <div class="color-swatches">
+          <div class="swatch active" style="background:#1A1A1A; border:1px solid #555;"></div>
+          <div class="swatch" style="background:#F0EAD6;"></div>
+          <div class="swatch" style="background:#C9A84C;"></div>
+          <div class="swatch" style="background:#3A3228;"></div>
+          <div class="swatch" style="background:#6B3A2A;"></div>
+          <div class="swatch" style="background:#2A3A3A;"></div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Size</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; padding:4px 0;">
+          <button class="filter-btn active" style="padding:6px 12px; font-size:0.58rem;">XS</button>
+          <button class="filter-btn" style="padding:6px 12px; font-size:0.58rem;">S</button>
+          <button class="filter-btn" style="padding:6px 12px; font-size:0.58rem;">M</button>
+          <button class="filter-btn" style="padding:6px 12px; font-size:0.58rem;">L</button>
+          <button class="filter-btn" style="padding:6px 12px; font-size:0.58rem;">XL</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- PRODUCTS AREA -->
+    <div class="products-area">
+      <div class="products-grid">
+
+        <!-- Product 1 -->
+        <div class="product-card animate-in" style="animation-delay:0.1s">
+          <div class="product-card-img">
+            <div class="product-card-bg bg-a"></div>
+            <div class="product-tag">New</div>
+            <div class="product-actions">
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="product-card-info">
+            <span class="product-category">Outerwear</span>
+            <div class="product-name">Siberian Wool Coat</div>
+            <div class="product-footer">
+              <div class="product-price">12,500 RUB</div>
+              <button class="add-to-cart">
+                Add
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card animate-in" style="animation-delay:0.18s">
+          <div class="product-card-img">
+            <div class="product-card-bg bg-b"></div>
+            <div class="product-tag sale">Sale</div>
+            <div class="product-actions">
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="product-card-info">
+            <span class="product-category">Knitwear</span>
+            <div class="product-name">Volga Merino Sweater</div>
+            <div class="product-footer">
+              <div>
+                <span class="product-price">7,200 RUB</span>
+                <span class="product-price-old">9,600 RUB</span>
+              </div>
+              <button class="add-to-cart">
+                Add
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product-card animate-in" style="animation-delay:0.26s">
+          <div class="product-card-img">
+            <div class="product-card-bg bg-c"></div>
+            <div class="product-tag">Exclusive</div>
+            <div class="product-actions">
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="product-card-info">
+            <span class="product-category">Accessories</span>
+            <div class="product-name">Kremlin Leather Gloves</div>
+            <div class="product-footer">
+              <div class="product-price">4,800 RUB</div>
+              <button class="add-to-cart">
+                Add
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- FEATURED BANNER inside grid -->
+        <div class="featured-banner">
+          <div class="fb-bg"></div>
+          <div class="fb-pattern"></div>
+          <div class="fb-content">
+            <div class="fb-eyebrow">Limited Drop</div>
+            <div class="fb-title">The <em>Noir Edition</em><br>Capsule Collection</div>
+          </div>
+          <div class="fb-cta">
+            <div class="fb-price-tag">
+              <span class="fb-price-label">Starting from</span>
+              <span class="fb-price">18,000 RUB</span>
+            </div>
+            <button class="fb-btn">Shop Capsule</button>
+          </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product-card animate-in" style="animation-delay:0.34s">
+          <div class="product-card-img">
+            <div class="product-card-bg bg-d"></div>
+            <div class="product-tag">New</div>
+            <div class="product-actions">
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="product-card-info">
+            <span class="product-category">Footwear</span>
+            <div class="product-name">Taiga Chelsea Boot</div>
+            <div class="product-footer">
+              <div class="product-price">15,900 RUB</div>
+              <button class="add-to-cart">
+                Add
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 5 -->
+        <div class="product-card animate-in" style="animation-delay:0.42s">
+          <div class="product-card-img">
+            <div class="product-card-bg bg-e"></div>
+            <div class="product-actions">
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="product-card-info">
+            <span class="product-category">Tailoring</span>
+            <div class="product-name">Ural Slim Blazer</div>
+            <div class="product-footer">
+              <div class="product-price">22,400 RUB</div>
+              <button class="add-to-cart">
+                Add
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 6 -->
+        <div class="product-card animate-in" style="animation-delay:0.5s">
+          <div class="product-card-img">
+            <div class="product-card-bg bg-f"></div>
+            <div class="product-tag sale">Sale</div>
+            <div class="product-actions">
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+              <button class="product-action-btn">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="product-card-info">
+            <span class="product-category">Knitwear</span>
+            <div class="product-name">Neva Cashmere Scarf</div>
+            <div class="product-footer">
+              <div>
+                <span class="product-price">3,100 RUB</span>
+                <span class="product-price-old">4,200 RUB</span>
+              </div>
+              <button class="add-to-cart">
+                Add
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end products-grid -->
+
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <div class="page-arrow">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+        <div class="page-num">1</div>
+        <div class="page-num active">2</div>
+        <div class="page-num">3</div>
+        <span class="page-dots">...</span>
+        <div class="page-num">12</div>
+        <div class="page-arrow">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </div><!-- end products-area -->
+  </div><!-- end shop-layout -->
+
+  <!-- NEWSLETTER -->
+  <div class="newsletter">
+    <div>
+      <div class="nl-tag">Stay Connected</div>
+      <h3 class="nl-title">Early Access &<br><em>Exclusive Offers</em></h3>
+    </div>
+    <div class="nl-form">
+      <div class="nl-input-group">
+        <input class="nl-input" type="email" placeholder="Your email address"/>
+        <button class="nl-submit">Subscribe</button>
+      </div>
+      <p class="nl-note">By subscribing you agree to our Privacy Policy. We promise no spam — only curated drops and early access to MoscoRetail collections.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">Mosco<span>Retail</span></div>
+        <p class="footer-desc">Curated luxury from the heart of Moscow. Celebrating Eastern European craftsmanship since 2007.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Shop</div>
+        <ul class="footer-links">
+          <li><a href="#">New Arrivals</a></li>
+          <li><a href="#">Collections</a></li>
+          <li><a href="#">Sale</a></li>
+          <li><a href="#">Lookbook</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Stores</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Support</div>
+        <ul class="footer-links">
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Size Guide</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">&copy; 2025 MoscoRetail — All Rights Reserved</div>
+      <div class="footer-socials">
+        <a href="#" class="social-link">IG</a>
+        <a href="#" class="social-link">TG</a>
+        <a href="#" class="social-link">VK</a>
+      </div>
+      <div class="footer-page-badge">Page 02 / 02</div>
+    </div>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      setTimeout(() => {
+        ring.style.left = e.clientX + 'px';
+        ring.style.top = e.clientY + 'px';
+      }, 60);
+    });
+
+    document.querySelectorAll('button, a, .product-card, .col-card, select').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '18px';
+        cursor.style.height = '18px';
+        ring.style.width = '54px';
+        ring.style.height = '54px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '10px';
+        cursor.style.height = '10px';
+        ring.style.width = '36px';
+        ring.style.height = '36px';
+      });
+    });
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const group = this.parentElement;
+        group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
