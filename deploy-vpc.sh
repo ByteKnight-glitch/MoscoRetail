@@ -22,3 +22,6 @@ else
     echo "Error al iniciar el despliegue."
     exit 1
 fi
+
+echo "Creando el Archivo MoscoRetail.pem"
+ssh-keygen -t ed25519 -f ./MoscoRetail
