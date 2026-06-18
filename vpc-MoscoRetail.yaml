@@ -1,0 +1,148 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  FASE 1 - VPC Landing Zone para MoscoRetail (Región US-East-1).
+  Crea la VPC corporativa distribuida de forma redundante entre las zonas
+  A y B de Virginia para cumplir con los requisitos de Alta Disponibilidad.
+
+Resources:
+
+  # -----------------------------------------------------------------------
+  # 1. VPC
+  # -----------------------------------------------------------------------
+  VpcMoscoRetail:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: vpc-moscoretail
+
+  # -----------------------------------------------------------------------
+  # 2. SUBREDES (ALTA DISPONIBILIDAD DISTRIBUIDA EN ZONAS A Y B)
+  # -----------------------------------------------------------------------
+
+  # Capa Pública - Zona de Disponibilidad A
+  SubnetPublicaWeb:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcMoscoRetail
+      CidrBlock: 10.0.0.0/24
+      AvailabilityZone: us-east-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: subnet-publica-web
+
+  # Capa Pública - Zona de Disponibilidad B (Alta Disponibilidad)
+  SubnetPublicaApp:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcMoscoRetail
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: us-east-1b
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: subnet-publica-app
+
+  # Capa Privada - Datos 1 (Aislamiento en AZ-A)
+  SubnetPrivadaDatos1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcMoscoRetail
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: us-east-1a
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: subnet-privada-datos-1
+
+  # Capa Privada - Datos 2 (Aislamiento en AZ-B - Requisito Multi-AZ para RDS/BBDD)
+  SubnetPrivadaDatos2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcMoscoRetail
+      CidrBlock: 10.0.3.0/24
+      AvailabilityZone: us-east-1b
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: subnet-privada-datos-2
+
+  # -----------------------------------------------------------------------
+  # 3. CONECTIVIDAD PERIMETRAL (INTERNET GATEWAY)
+  # -----------------------------------------------------------------------
+  IgwMoscoRetail:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: igw-moscoretail
+
+  AttachIgw:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VpcMoscoRetail
+      InternetGatewayId: !Ref IgwMoscoRetail
+
+  # -----------------------------------------------------------------------
+  # 4. ENRUTAMIENTO (ROUTE TABLES)
+  # -----------------------------------------------------------------------
+  RtPublicaMoscoRetail:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VpcMoscoRetail
+      Tags:
+        - Key: Name
+          Value: rt-publica-moscoretail
+
+  RoutePublica:
+    Type: AWS::EC2::Route
+    DependsOn: AttachIgw
+    Properties:
+      RouteTableId: !Ref RtPublicaMoscoRetail
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref IgwMoscoRetail
+
+  AssocPublicaWeb:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetPublicaWeb
+      RouteTableId: !Ref RtPublicaMoscoRetail
+
+  AssocPublicaApp:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetPublicaApp
+      RouteTableId: !Ref RtPublicaMoscoRetail
+
+# ─────────────────────────────────────────────────────────────────────────
+# OUTPUTS
+# ─────────────────────────────────────────────────────────────────────────
+Outputs:
+  VpcId:
+    Value: !Ref VpcMoscoRetail
+    Export:
+      Name: vpc-moscoretail-id
+
+  SubnetPublicaWebId:
+    Value: !Ref SubnetPublicaWeb
+    Export:
+      Name: subnet-publica-web-id
+
+  SubnetPublicaAppId:
+    Value: !Ref SubnetPublicaApp
+    Export:
+      Name: subnet-publica-app-id
+
+  SubnetPrivadaDatos1Id:
+    Value: !Ref SubnetPrivadaDatos1
+    Export:
+      Name: subnet-privada-datos-1-id
+
+  SubnetPrivadaDatos2Id:
+    Value: !Ref SubnetPrivadaDatos2
+    Export:
+      Name: subnet-privada-datos-2-id
