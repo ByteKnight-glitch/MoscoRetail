@@ -24,4 +24,4 @@ else
 fi
 
 echo "Generando clave SSH de forma automática..."
-ssh-keygen -t ed25519 -f "./$KEY_NAME" -N ""
+ssh-keygen -t ed25519 -f "./MoscoRetail.pem" -N ""
