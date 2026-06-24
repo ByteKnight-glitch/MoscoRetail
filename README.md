@@ -1,3 +1,3 @@
-# MoscoRetail
+Script de implementacion para la empresa MoscoRetail
 
-Evaluacion Parcian 3 (INY1104)
+Evaluacion Parcial 3 (INY1104)
